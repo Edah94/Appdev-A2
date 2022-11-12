@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!--Reference to the css-->
+    <link rel="stylesheet" type="text/css" href="style.css">
+
+    <script src="https://cdn.jsdelivr.net/gh/openlayers/openlayers.github.io@master/en/v6.4.3/build/ol.js"></script>    
+    
+
+    <link rel="stylesheet" href="node_modules/ol-layerswitcher/src/ol-layerswitcher.css">
+    
+    <title>Mobile map ES & MS</title>
+</head>
+<body onload="init();">
+    <!--Here a main container with its 3 child division containers is created-->
+    <div id="container">
+        <div id="upper_div">
+            <!--Is a child div of the most top div serving as a title-->
+            <div id="upper_div_text">Mobile Map ::: Edah Sahinovic & Martin Stobbelaar</div>
+        </div>
+        <div id="map"></div>
+        <div id="lower_div"></div>
+    </div>
+
+    <!--Popup container section-->
+    <div class="overlay-container">
+        <span class='overlay-text' id='feature-name'></span><br>
+        <span class='overlay-text' id='feature-pop-est'></span><br>
+        <span class='overlay-text' id='feature-sq-km'></span><br>
+    </div>
+
+    <script src="v6.15.1-dist/ol.js"></script>
+    <script src="https://cdn.rawgit.com/openlayers/openlayers.github.io/master/en/v6.4.3/build/ol.js"></script>
+    <script src="node_modules/ol-layerswitcher/dist/ol-layerswitcher.js"></script>
+    <script src="main.js" type="text/javascript"></script>
+        
+</body>
+</html>
