@@ -199,7 +199,7 @@ function init (){
 
 })
 map.addInteraction(featureSelector)
-
+/*
     //Feature interaction (Pointermove/hover)
     const selectStyle = new ol.style.Style({
         fill: new ol.style.Fill({
@@ -234,7 +234,7 @@ map.addInteraction(featureSelector)
     });
 
 
-
+*/
 
 
 }// init() function

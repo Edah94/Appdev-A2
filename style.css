@@ -1,59 +1,75 @@
 /*the container has a fixed position and is adaptable to different screen sizes */
-#container{
-    position: fixed;
-    bottom: 0;
-    right: 0;
-    left: 0;
-    top: 0;
+html {
+    margin: 0;
+    padding: 0;
 }
 
 /*The uppermost and lowermost containers have absolute positionscoupled
   with fixed height so they do not change due to the scaling of the screen*/
 #upper_div{
-    height: 40px;
-    width: 100%;
-    background-color: rgb(5, 155, 255);
     position: absolute;
+	top: 0px;
+	left: 0px;
+	right: 0px;
+	height: 40px;
+	background: rgb(5, 155, 255);
+	color: white;
+	text-align: center;
+	font-weight: bold;
+	font-size: 150%;
     z-index: 5;
 }
 
+#upper_div p{
+    color: whitesmoke;
+    text-align: center;
+    position: relative;
+    margin-top: 9px;
+    font-size: 20px;
+    font: georgia;
+    z-index: 6;
+
+}
 
 #left_div{
     position: absolute;
-    width: 20%;
-    height: 100%;
-    background-color: rgb(5, 155, 255);
+    width: 15%;
+    top: 40px;
+    bottom: 40px;
+    left: 0;
+    background: rgb(5, 180, 255);
    
 }
 
 /*The middlepart div has a height in percentages since it will dinamically scale with the screen height*/
 #map{
-    position: relative;
-    height: 100%;
-    width: 80%;
-    float: right;
-    background-color: rgb(179, 247, 179);
+    position: absolute;
+	top: 40px;
+	left: 15%;
+	right: 0px;
+	bottom: 40px;
+	background: #CCFFCC;
 }
 
 /*In addition to the uppermost div container, it has a bottom fixed in order to remain at its position */
 #lower_div{
-    height: 40px;
-    width: 100%;
-    background-color: rgb(5, 155, 255);
-    bottom: 0px;
-    position:absolute;
+    position: absolute;
+	bottom: 0px;
+	left: 0px;
+	right: 0px;
+	height: 45px;
+	background: rgb(5, 155, 255);
+	color: white;
+	text-align: center;
+	font-weight: bold;
+	font-size: 100%;
+	padding: 0;
+	margin: 0;
+    z-index: 5;
 }
 
 /*Title, positioned in the center of its parent div*/
-#upper_div_text{
-    color: whitesmoke;
-    text-align: center;
-    position: relative;
-    top: 25%;
-    font-size: 20px;
-    font: georgia;
 
-}
 
 .overlay-container{
     background-color: rgb(224, 86, 86);

@@ -16,15 +16,16 @@
     </head>
     <body onload="init();">
         <!--Here a main container with its 3 child division containers is created-->
-        <div id="container">
-            <div id="upper_div">
-                <!--Is a child div of the most top div serving as a title-->
-                <div id="upper_div_text">Mobile Map ::: Edah Sahinovic, Martin Stobbelaar & Parisa Kalanaki</div>
-            </div>
-            <div id="left_div"></div>--> 
-            <div id="map"></div>
-            <div id="lower_div"></div>
+        
+        <div id="upper_div"><p>Mobile Map ::: Edah Sahinovic, Martin Stobbelaar & Parisa Kalanaki</p></div>
+        <div id="left_div">
+            <div id="basemap_layer">Basemap layer</div>
+            <div id="vector_layer">Vector layer</div>
+            <div id="interaction_methods">Interaction methods</div>
         </div>
+        <div id="map"></div>
+        <div id="lower_div"></div>
+        
 
         <!--Popup container section-->
         <div class="overlay-container">
