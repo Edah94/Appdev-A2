@@ -17,10 +17,21 @@
     z-index: 5;
 }
 
+
+#left_div{
+    position: absolute;
+    width: 20%;
+    height: 100%;
+    background-color: rgb(5, 155, 255);
+   
+}
+
 /*The middlepart div has a height in percentages since it will dinamically scale with the screen height*/
 #map{
+    position: relative;
     height: 100%;
-    width: 100%;
+    width: 80%;
+    float: right;
     background-color: rgb(179, 247, 179);
 }
 

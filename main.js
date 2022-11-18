@@ -107,7 +107,7 @@ function init (){
 
     //World countries style
     const fillStyleCountries = new ol.style.Fill({
-        color: [84, 118, 255, 0] //4th digit - 1 nontransparent, 0 transparent
+        color: [84, 118, 255, 1] //4th digit - 1 nontransparent, 0 transparent
     });
     
     const strokeStyleCountries = new ol.style.Stroke({
@@ -123,7 +123,11 @@ function init (){
         stroke: strokeStyleCountries
     });
 
-    
+    // TO DO 
+    //Population calculation function 
+    PopCalcFunction = new function(){
+
+    }
 
     //World countries geoJSON as VectorImage
     const WorldCountriesGeoJSON = new ol.layer.VectorImage({
@@ -178,7 +182,56 @@ function init (){
     });
     map.addLayer(WorldCapitalsGeoJSON)
 
+    //Feature interaction (Select)
+    const featureSelector = new ol.interaction.Select({
+        condition: ol.events.condition.singleClick,
+         //TODO - Layer filter, for later on
+        /*
+        layers: function(layer){
+            return layer.get('title') === 'World capital cities'
+        },*/
+        /*
+        style: new ol.style.Style({
+            fill: new ol.style.Fill({
+                color: [200, 100, 120, 1]
+            })
+        })*/
 
+})
+map.addInteraction(featureSelector)
+
+    //Feature interaction (Pointermove/hover)
+    const selectStyle = new ol.style.Style({
+        fill: new ol.style.Fill({
+        color: '#eeeeee',
+        }),
+        stroke: new ol.style.Stroke({
+        color: 'rgba(255, 255, 255, 0.7)',
+        width: 2,
+        }),
+    });
+
+
+    let selected = null;
+    map.on('pointermove', function (e) {
+    if (selected !== null) {
+        selected.setStyle(undefined);
+        selected = null;
+    }
+
+    map.forEachFeatureAtPixel(e.pixel, function (f) {
+        selected = f;
+        selectStyle.getFill().setColor(f.get('COLOR') || '#eeeeee');
+        f.setStyle(selectStyle);
+        return true;
+    });
+
+    if (selected) {
+        status.innerHTML = selected.get('ECO_NAME');
+    } else {
+        status.innerHTML = '&nbsp;';
+    }
+    });
 
 
 
