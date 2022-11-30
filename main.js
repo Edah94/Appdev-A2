@@ -21,7 +21,8 @@ function init (){
             zoom: 0
         })
     });
-
+    
+    //Base layers
     //1st raster tile layer - OSM Standard
     var OSMStandard = new ol.layer.Tile({
         source: new ol.source.OSM({
@@ -41,14 +42,30 @@ function init (){
         title: 'Stamen'
     })
     
+    
+    
 
     //overlayGroup - grouping of the (raster) Tile layers listed
-    var overlayGroup = new ol.layer.Group({
-        title: 'Overlays',
-        fold: true,
+    var baseLayerGroup = new ol.layer.Group({
         layers: [Stamen, OSMStandard]
     })
-    map.addLayer(overlayGroup);
+    map.addLayer(baseLayerGroup);
+
+    //Layer switcher 
+    const baseLayerElements = document.querySelectorAll('.sidebar1 > input[type=radio]')
+    for(let baseLayerElement of baseLayerElements){
+        baseLayerElement.addEventListener('change', function(){
+            let baseLayerValue = this.value;
+            baseLayerGroup.getLayers().forEach(function(element, index, array){
+                let baselayerName = element.get('title');
+                element.setVisible(baselayerName === baseLayerValue)
+            })
+        })
+    }
+
+
+   
+
 
     //layerSwitcher control - enables switching and turning on/off between incorporated layers
     //including raster and vector layers
@@ -67,6 +84,7 @@ function init (){
     });
     map.addOverlay(overlayLayer);
 
+    //doesn't work for now
     function closePopup() {
         let popupContainerElement = document.getElementById("overlay-container");
         popup.style.display = "none";
@@ -137,7 +155,7 @@ function init (){
             
         }),
         visible: true,
-        title: 'World countries',
+        title: 'World Countries',
         style: new ol.style.Style({
             fill: fillStyleCountries,
             stroke: strokeStyleCountries,
@@ -173,7 +191,7 @@ function init (){
             
         }),
         visible: true,
-        title: 'World capital cities',
+        title: 'World Capital Cities',
         style: new ol.style.Style({
             fill: fillStyleCapitals,
             stroke: strokeStyleCapitals,
@@ -181,6 +199,23 @@ function init (){
         })
     });
     map.addLayer(WorldCapitalsGeoJSON)
+
+
+    var vectorLayerGroup = new ol.layer.Group({
+        layers: [WorldCountriesGeoJSON, WorldCapitalsGeoJSON]
+    })
+    map.addLayer(vectorLayerGroup);
+
+    const vectorLayerElements = document.querySelectorAll('.sidebar2 > input[type=radio]')
+    for(let vectorLayerElement of vectorLayerElements){
+        vectorLayerElement.addEventListener('change', function(){
+            let vectorLayerValue = this.value;
+            vectorLayerGroup.getLayers().forEach(function(element, index, array){
+                let vectorLayerName = element.get('title');
+                element.setVisible(vectorLayerName === vectorLayerValue)
+            })
+        })
+    }
 
     //Feature interaction (Select)
     const featureSelector = new ol.interaction.Select({

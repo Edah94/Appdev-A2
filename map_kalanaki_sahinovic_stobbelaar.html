@@ -18,11 +18,32 @@
         <!--Here a main container with its 3 child division containers is created-->
         
         <div id="upper_div"><p>Mobile Map ::: Edah Sahinovic, Martin Stobbelaar & Parisa Kalanaki</p></div>
+        <!--
         <div id="left_div">
             <div id="basemap_layer">Basemap layer</div>
             <div id="vector_layer">Vector layer</div>
             <div id="interaction_methods">Interaction methods</div>
         </div>
+        -->
+        <div id="left_div">
+            <div class="grid-1">
+              <div class="sidebar1">
+                <h2>Base Layers</h2>
+                <input type="radio" name='baseLayerRadioButton' value='OSMStandard' checked>OSM Standard<br>
+                <input type="radio" name='baseLayerRadioButton' value='Stamen'>Stamen<br>
+              </div>
+              <div class="sidebar2">
+                <h2>Vector Layers</h2>
+                <!--checkbox not working at the moment, need a way to figure the switching mechanism-->
+                <input type="checkbox" name='vectorLayerRadioButton' value='World Countries' checked>World Countries<br>
+                <input type="checkbox" name='vectorLayerRadioButton' value='World Capital Cities'>World Capital Cities<br>
+              </div>
+            </div>
+            <div class="grid-2">
+              <div id='js-map' class='map'></div>
+            </div>
+          </div>
+        
         <div id="map"></div>
         <div id="lower_div"></div>
         

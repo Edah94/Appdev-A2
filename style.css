@@ -41,6 +41,7 @@ html {
    
 }
 
+
 /*The middlepart div has a height in percentages since it will dinamically scale with the screen height*/
 #map{
     position: absolute;
