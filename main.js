@@ -1,3 +1,4 @@
+
 function init (){
     var attribution = new ol.control.Attribution({
         collapsible: false
@@ -162,7 +163,7 @@ function init (){
             image: circleStyleCountries
         })
     });
-    map.addLayer(WorldCountriesGeoJSON)
+    //map.addLayer(WorldCountriesGeoJSON)
 
 
     //World capitals style
@@ -190,7 +191,7 @@ function init (){
             format: new ol.format.GeoJSON(),
             
         }),
-        visible: true,
+        visible: false,
         title: 'World Capital Cities',
         style: new ol.style.Style({
             fill: fillStyleCapitals,
@@ -198,7 +199,7 @@ function init (){
             image: circleStyleCapitals
         })
     });
-    map.addLayer(WorldCapitalsGeoJSON)
+    //map.addLayer(WorldCapitalsGeoJSON)
 
 
     var vectorLayerGroup = new ol.layer.Group({
@@ -206,20 +207,29 @@ function init (){
     })
     map.addLayer(vectorLayerGroup);
 
+
     const vectorLayerElements = document.querySelectorAll('.sidebar2 > input[type=radio]')
     for(let vectorLayerElement of vectorLayerElements){
         vectorLayerElement.addEventListener('change', function(){
             let vectorLayerValue = this.value;
             vectorLayerGroup.getLayers().forEach(function(element, index, array){
-                let vectorLayerName = element.get('title');
-                element.setVisible(vectorLayerName === vectorLayerValue)
+                let vectorlayerName = element.get('title');
+                element.setVisible(vectorlayerName === vectorLayerValue)
             })
         })
     }
 
+
+
+
+
+
+
+
+
     //Feature interaction (Select)
     const featureSelector = new ol.interaction.Select({
-        condition: ol.events.condition.singleClick,
+        condition: ol.events.condition.singleClick, //pointerMove for interactive 
          //TODO - Layer filter, for later on
         /*
         layers: function(layer){

@@ -35,8 +35,8 @@
               <div class="sidebar2">
                 <h2>Vector Layers</h2>
                 <!--checkbox not working at the moment, need a way to figure the switching mechanism-->
-                <input type="checkbox" name='vectorLayerRadioButton' value='World Countries' checked>World Countries<br>
-                <input type="checkbox" name='vectorLayerRadioButton' value='World Capital Cities'>World Capital Cities<br>
+                <input type="radio" name='vectorLayerRadioButton' value='World Countries' checked>World Countries<br>
+                <input type="radio" name='vectorLayerRadioButton' value='World Capital Cities'>World Capital Cities<br>
               </div>
             </div>
             <div class="grid-2">
@@ -53,6 +53,7 @@
             <span class='overlay-text' id='feature-name'></span><br>
             <span class='overlay-text' id='feature-pop-est'></span><br>
             <span class='overlay-text' id='feature-sq-km'></span><br>
+            <span class='overlay-text' id='close-feature' onclick="closePopup()">X</span><br>
         </div>
 
         <script src="v6.15.1-dist/ol.js"></script>
