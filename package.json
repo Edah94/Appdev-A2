@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "ol-ext": "^4.0.4",
     "ol-layerswitcher": "^4.1.0"
   }
 }

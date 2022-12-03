@@ -1,4 +1,6 @@
 
+//import ol.control.SearchFeature from '/node_modules/ol-ext/control/SearchFeature.js';
+
 function init (){
     var attribution = new ol.control.Attribution({
         collapsible: false
@@ -220,6 +222,64 @@ function init (){
     }
 
 
+    const searchSource = new ol.source.Vector({
+        features: []
+      });
+
+    WorldCapitalsGeoJSON.on("addfeature", function (e) {
+        e.feature.set("featureType", "capital");
+        searchSource.addFeature(e.feature);
+      });
+      
+      WorldCountriesGeoJSON.on("addfeature", function (e) {
+        e.feature.set("featureType", "country");
+        searchSource.addFeature(e.feature);
+      });
+      
+    //map.addLayer(searchSource)
+    
+
+    
+      map.addControl(new ol.control.SearchFeature({
+        source: searchSource,
+        getTitle: function (feature) {
+          switch (feature.get("featureType")) {
+            case "capital":
+              return feature.get("name");
+            case "country":
+              return feature.get("NAME");
+          }
+        },
+        // etc
+      }));
+    
+      map.addControl(new ol.control.SearchFeature({
+        source: WorldCountriesGeoJSON,
+        getTitle: function (feature) {
+          return feature.get("name")
+        },
+        // etc
+      }));
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    map.addControl(new ol.control.SearchFeature({
+        source: WorldCapitalsGeoJSON, // of type ol.source.Vector
+        property: "Name"
+        // etc
+      }));
 
 
 
@@ -244,6 +304,18 @@ function init (){
 
 })
 map.addInteraction(featureSelector)
+
+
+
+
+
+
+
+
+
+
+
+
 /*
     //Feature interaction (Pointermove/hover)
     const selectStyle = new ol.style.Style({

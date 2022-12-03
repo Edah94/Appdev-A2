@@ -8,10 +8,11 @@
         <link rel="stylesheet" type="text/css" href="style.css">
 
         <script src="https://cdn.jsdelivr.net/gh/openlayers/openlayers.github.io@master/en/v6.4.3/build/ol.js"></script>    
-        
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.2.61/jspdf.min.js"></script>
 
+        <link rel="stylesheet" href="node_modules/ol-ext/dist/ol-ext.css">
         <link rel="stylesheet" href="node_modules/ol-layerswitcher/src/ol-layerswitcher.css">
-        
+        <link rel="stylesheet" href="https://viglino.github.io/ol-ext//dist/ol-ext.css"/>
         <title>Mobile map ES, MS & PK</title> 
     </head>
     <body onload="init();">
@@ -55,11 +56,16 @@
             <span class='overlay-text' id='feature-sq-km'></span><br>
             <span class='overlay-text' id='close-feature' onclick="closePopup()">X</span><br>
         </div>
-
+        
         <script src="v6.15.1-dist/ol.js"></script>
         <script src="https://cdn.rawgit.com/openlayers/openlayers.github.io/master/en/v6.4.3/build/ol.js"></script>
         <script src="node_modules/ol-layerswitcher/dist/ol-layerswitcher.js"></script>
+        
+        
+        <script type="module" src="node_modules/ol-ext/dist/ol-ext.js"></script>
+        
+      
         <script src="main.js" type="text/javascript"></script>
-            
+          
     </body>
 </html>
