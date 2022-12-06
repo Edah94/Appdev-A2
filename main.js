@@ -1,5 +1,4 @@
 
-//import ol.control.SearchFeature from '/node_modules/ol-ext/control/SearchFeature.js';
 
 function init (){
     var attribution = new ol.control.Attribution({
@@ -80,6 +79,39 @@ function init (){
     
     map.addControl(layerSwitcher);
 
+    /*
+    const container = document.getElementById('popup');
+    const content = document.getElementById('popup-content');
+    const closer = document.getElementById('popup-closer');
+
+    const overlay = new ol.Overlay({
+        element: container,
+        autoPan: {
+          animation: {
+            duration: 250,
+          },
+        },
+      });
+
+    closer.onclick = function () {
+        overlay.setPosition(undefined);
+        closer.blur();
+        return false;
+      };
+
+
+    map.on('singleclick', function (evt) {
+        const coordinate = evt.coordinate;
+        //const hdms = ol.coordinate.toStringHDMS(toLonLat(coordinate));
+      
+        content.innerHTML = '<p>You clicked here:</p><code>' + "yes" + '</code>';
+        overlay.setPosition(coordinate);
+      });
+    */
+    
+
+    const closer = document.getElementById('close-feature');
+    
     const popupContainerElement = document.querySelector(' .overlay-container')
     const overlayLayer = new ol.Overlay({
         element: popupContainerElement,
@@ -89,40 +121,67 @@ function init (){
 
     //doesn't work for now
     function closePopup() {
-        let popupContainerElement = document.getElementById("overlay-container");
-        popup.style.display = "none";
-        popupContainerElement.innerHTML = null;
+        let popupContainer = document.querySelector(' .overlay-container')
+        //popupContainer.style.display = "none";
+        popupContainer.innerHTML = null;
       }
+    
+    closer.onclick = function () {
+    overlayLayer.setPosition(undefined);
+    closer.blur();
+    return false;
+    };
+    
 
     //get HTML elements by ID in order to enable their interactivity
     const overlayFeatureName = document.getElementById('feature-name')
     const overlayFeaturePopEst = document.getElementById('feature-pop-est')
     const overlayFeatureSqkm = document.getElementById('feature-sq-km')
-    
+    //const popupContainerDisplay = document.getElementById('close-feature')
     /* on click event listener - enables the interactivity between the 
     mapped layer and its features with the rest of the code*/
+    
     map.on('click', function(e){
         map.forEachFeatureAtPixel(e.pixel, function(feature, layer){
-            
+            //console.log(feature.get('title'))
+            layerName = layer.get('title')
             //fetch the countries attributes
-            let clickedFeatureName = feature.get('NAME');
-            let clickedFeaturePopEst = feature.get('POP_EST');
-            let clickedFeatureSqkm = feature.get('Sq_km');
-            
-            //sets new popup on click
-            const clickedCoordinate = e.coordinate;
-            overlayLayer.setPosition(clickedCoordinate); 
+            if(layerName === 'World Countries'){
+                let clickedFeatureName = feature.get('NAME');
+                let clickedFeaturePopEst = feature.get('POP_EST');
+                let clickedFeatureSqkm = feature.get('Sq_km');
+                
+                //sets new popup on click
+                const clickedCoordinate = e.coordinate;
+                overlayLayer.setPosition(clickedCoordinate); 
 
-            //populate the HTML elements with feature attributes
-            if (clickedFeatureName != undefined){
-                overlayFeatureName.innerHTML = "Country: " + clickedFeatureName
-                overlayFeaturePopEst.innerHTML = "Pop est.: " + clickedFeaturePopEst
-                overlayFeatureSqkm.innerHTML = "Sq. km: " + clickedFeatureSqkm
+                //populate the HTML elements with feature attributes
+                if (clickedFeatureName != undefined){
+                    overlayFeatureName.innerHTML = "Country: " + clickedFeatureName
+                    overlayFeaturePopEst.innerHTML = "Pop est.: " + clickedFeaturePopEst
+                    overlayFeatureSqkm.innerHTML = "Sq. km: " + clickedFeatureSqkm
+                }
+            }else if (layerName === 'World Capital Cities'){
+                let clickedFeatureName = feature.get('name');
+                let clickedFeaturePopEst = feature.get('pop_max');
+                
+                
+                //sets new popup on click
+                const clickedCoordinate = e.coordinate;
+                overlayLayer.setPosition(clickedCoordinate); 
+
+                //populate the HTML elements with feature attributes
+                if (clickedFeatureName != undefined){
+                    overlayFeatureName.innerHTML = "City: " + clickedFeatureName
+                    overlayFeaturePopEst.innerHTML = "Pop est.: " + clickedFeaturePopEst
+                    overlayFeatureSqkm.innerHTML = ""
+                }
             }
+            
             
         })
     });
-
+    
     
     // VECTOR FEATURE SECTION (geoJSON, styling..)
 
@@ -201,7 +260,7 @@ function init (){
             image: circleStyleCapitals
         })
     });
-    //map.addLayer(WorldCapitalsGeoJSON)
+    map.addLayer(WorldCapitalsGeoJSON)
 
 
     var vectorLayerGroup = new ol.layer.Group({
@@ -236,10 +295,7 @@ function init (){
         searchSource.addFeature(e.feature);
       });
       
-    //map.addLayer(searchSource)
-    
-
-    
+      /*
       map.addControl(new ol.control.SearchFeature({
         source: searchSource,
         getTitle: function (feature) {
@@ -250,17 +306,16 @@ function init (){
               return feature.get("NAME");
           }
         },
-        // etc
       }));
+    */
+
     
-      map.addControl(new ol.control.SearchFeature({
-        source: WorldCountriesGeoJSON,
-        getTitle: function (feature) {
-          return feature.get("name")
-        },
-        // etc
-      }));
-    
+    /*
+
+      search =new ol.control.SearchFeature({
+        source: WorldCountriesGeoJSON
+      })
+      */
 
 
 
@@ -272,15 +327,30 @@ function init (){
 
 
 
-
-
-
-    map.addControl(new ol.control.SearchFeature({
+      
+    var search = new ol.control.SearchFeature({
         source: WorldCapitalsGeoJSON, // of type ol.source.Vector
-        property: "Name"
-        // etc
-      }));
+        getTitle: function (feature) {
+            if (feature.get('NAME') != undefined) {
+            returnName = feature.get('NAME');
+            }
+            else {
+            returnName = 'dummy title';
+            
+            }
+            return returnName;
+            
+            }
+    });
+      
+    map.addControl(search)
 
+    search.on('select'), function(e){
+        select.getFeatures().clear;
+        select.getFeatures().push (e.search);
+        var p = e.search.getGeometry().getFirstCoordinate();
+        map.getView().animate({cnter:p})
+    }
 
 
 
@@ -288,6 +358,7 @@ function init (){
 
 
     //Feature interaction (Select)
+    
     const featureSelector = new ol.interaction.Select({
         condition: ol.events.condition.singleClick, //pointerMove for interactive 
          //TODO - Layer filter, for later on
@@ -302,7 +373,7 @@ function init (){
             })
         })*/
 
-})
+    })
 map.addInteraction(featureSelector)
 
 

@@ -74,10 +74,12 @@ html {
 
 .overlay-container{
     background-color: rgb(224, 86, 86);
+    box-shadow: 0 1px 4px rgba(0,0,0,0.2);
     width: 100px;
     color: #fff;
     text-align: left;
-    border-radius: 1px;
+    border-radius: 8px;
+    border: 1px solid;
     padding: 2px 0;
     position: absolute;
     z-index: 1;
@@ -91,3 +93,13 @@ html {
     font-family:'Times New Roman';
 }
 
+#close-feature {
+    text-decoration: none;
+    position: absolute;
+    top: 2px;
+    right: 8px;
+  }
+  
+#close-feature {
+    content: "✖";
+  }
