@@ -188,11 +188,19 @@ function init (){
     
     // VECTOR FEATURE SECTION (geoJSON, styling..)
 
-    //World countries style
-    const fillStyleCountries = new ol.style.Fill({
-        color: [84, 118, 255, 1] //4th digit - 1 nontransparent, 0 transparent
-    });
+
     
+    //World countries style
+
+    // const popnumber = feature.get('POP_EST'); not working... 
+    const fillStyleCountries = new ol.style.Fill({
+        color: getColorPop(10000000)
+//      color: getColorPop(popnumber) not working as I thought would... 
+//       color: [84, 118, 255, 1] //4th digit - 1 nontransparent, 0 transparent
+    });
+
+
+
     const strokeStyleCountries = new ol.style.Stroke({
         color: [46, 45, 45, 1],
         width: 1.2
@@ -206,10 +214,17 @@ function init (){
         stroke: strokeStyleCountries
     });
 
-    // TO DO 
+    // IN PROGRESS 
     //Population calculation function 
-    PopCalcFunction = new function(){
-
+    function getColorPop(d) {
+        return d > 200000000 ? '#800026' :
+                d > 100000000 ? '#BD0026' :
+                d > 50000000 ? '#E31A1C' :
+                d > 10000000 ? '#FC4E2A' :
+                d > 5000000 ? '#FD8D3C' :
+                d > 3000000 ? '#FEB24C' :
+                d > 1000000 ? '#FED976' :
+                '#FFEDA0';
     }
 
     //World countries geoJSON as VectorImage
