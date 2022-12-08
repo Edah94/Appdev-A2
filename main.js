@@ -4,24 +4,27 @@ function init (){
     var attribution = new ol.control.Attribution({
         collapsible: false
         });
-    
-        var map = new ol.Map({
-        controls: ol.control.defaults({attribution: false}).extend([attribution]),
-        layers: [
-            new ol.layer.Tile({
-            source: new ol.source.OSM({
-                url: 'https://tile.openstreetmap.be/osmbe/{z}/{x}/{y}.png',
-                attributions: [ ol.source.OSM.ATTRIBUTION, 'Tiles courtesy of <a href="https://geo6.be/">GEO-6</a>' ],
-                maxZoom: 18
-            })
-            })
-        ],
-        target: 'map',
-        view: new ol.View({
-            center: [0, 0],
-            maxZoom: 18,
-            zoom: 0
+        
+
+    const view = new ol.View({
+        center: [0, 0],
+        maxZoom: 18,
+        zoom: 0
+    })
+
+    var map = new ol.Map({
+    controls: ol.control.defaults({attribution: false}).extend([attribution]),
+    layers: [
+        new ol.layer.Tile({
+        source: new ol.source.OSM({
+            url: 'https://tile.openstreetmap.be/osmbe/{z}/{x}/{y}.png',
+            attributions: [ ol.source.OSM.ATTRIBUTION, 'Tiles courtesy of <a href="https://geo6.be/">GEO-6</a>' ],
+            maxZoom: 18
         })
+        })
+    ],
+    target: 'map',
+    view: view
     });
     
     //Base layers
@@ -77,7 +80,7 @@ function init (){
         groupSelectStyle: 'children'
     });
     
-    map.addControl(layerSwitcher);
+    //map.addControl(layerSwitcher);
 
     /*
     const container = document.getElementById('popup');
@@ -210,7 +213,7 @@ function init (){
     }
 
     //World countries geoJSON as VectorImage
-    const WorldCountriesGeoJSON = new ol.layer.VectorImage({
+    const WorldCountriesGeoJSON = new ol.layer.Vector({
         source: new ol.source.Vector({
             url: './Data/geoJSON/countries_modified_WGS_1984.json',
             format: new ol.format.GeoJSON(),
@@ -246,13 +249,13 @@ function init (){
     });
 
     //World capitals geoJSON as VectorImage
-    const WorldCapitalsGeoJSON = new ol.layer.VectorImage({
+    const WorldCapitalsGeoJSON = new ol.layer.Vector({
         source: new ol.source.Vector({
-            url: './Data/geoJSON/world_capital_cities.geojson',
+            url: './Data/geoJSON/capital_cities.geojson',
             format: new ol.format.GeoJSON(),
             
         }),
-        visible: false,
+        visible: true,
         title: 'World Capital Cities',
         style: new ol.style.Style({
             fill: fillStyleCapitals,
@@ -294,7 +297,19 @@ function init (){
         e.feature.set("featureType", "country");
         searchSource.addFeature(e.feature);
       });
-      
+    
+    /*
+      var search = new ol.control.SearchFeature({
+        source: WorldCapitalsGeoJSON, // of type ol.source.Vector
+        getTitle: function (feature) {
+            
+            returnName = feature.get('name');
+
+            return returnName
+            
+    }});
+    map.addControl(search)
+    */
       /*
       map.addControl(new ol.control.SearchFeature({
         source: searchSource,
@@ -308,51 +323,23 @@ function init (){
         },
       }));
     */
-
+    var select = new ol.interaction.Select({});
+    map.addInteraction(select);
     
-    /*
-
-      search =new ol.control.SearchFeature({
-        source: WorldCountriesGeoJSON
-      })
-      */
-
-
-
-
-
-
-
-
-
-
-
-      
     var search = new ol.control.SearchFeature({
-        source: WorldCapitalsGeoJSON, // of type ol.source.Vector
-        getTitle: function (feature) {
-            if (feature.get('NAME') != undefined) {
-            returnName = feature.get('NAME');
-            }
-            else {
-            returnName = 'dummy title';
-            
-            }
-            return returnName;
-            
-            }
+        source: WorldCapitalsGeoJSON.getSource(),
+        property: $(".options select").val()
     });
       
     map.addControl(search)
-
+    
     search.on('select'), function(e){
         select.getFeatures().clear;
         select.getFeatures().push (e.search);
         var p = e.search.getGeometry().getFirstCoordinate();
-        map.getView().animate({cnter:p})
+        map.getView().animate({center:p})
     }
-
-
+    
 
 
 
