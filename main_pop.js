@@ -192,29 +192,26 @@ function init (){
     
     //World countries style
 
-    const fillStyleCountries = new ol.style.Fill({
+//     const fillStyleCountries = new ol.style.Fill({
+//     color: [84, 118, 255, 1] //4th digit - 1 nontransparent, 0 transparent
+//     });
 
-      color: [84, 118, 255, 1] //4th digit - 1 nontransparent, 0 transparent
-    });
-
-
-
-    const strokeStyleCountries = new ol.style.Stroke({
-        color: [46, 45, 45, 1],
-        width: 1.2
-    });
+//     const strokeStyleCountries = new ol.style.Stroke({
+//         color: [46, 45, 45, 1],
+//         width: 1.2
+//     });
     
-    const circleStyleCountries = new ol.style.Circle({
-        fill: new ol.style.Fill({
-            color: [245, 49, 5, 1]
-        }),
-        radius: 7,
-        stroke: strokeStyleCountries
-    });
+//     const circleStyleCountries = new ol.style.Circle({
+//         fill: new ol.style.Fill({
+//             color: [245, 49, 5, 1]
+//         }),
+//         radius: 7,
+//         stroke: strokeStyleCountries
+//     });
 
+// 
 
-
-    //World countries geoJSON as VectorImage
+        //World countries geoJSON as VectorImage
     const WorldCountriesGeoJSON = new ol.layer.Vector({
         source: new ol.source.Vector({
             url: './Data/geoJSON/countries_modified_WGS_1984.json',
@@ -223,13 +220,58 @@ function init (){
         }),
         visible: true,
         title: 'World Countries',
-        style: new ol.style.Style({
-            fill: fillStyleCountries,
-            stroke: strokeStyleCountries,
-            image: circleStyleCountries
-        })
+        //World countries style
+        style: function (feature, resolution) {
+            return getWorldCountryStyle(feature, resolution);
+        }
     });
-    //map.addLayer(WorldCountriesGeoJSON)
+
+    //Population calculation function for style
+    getWorldCountryStyle = function (feature, resolution) {
+
+    // 7 different colors. 4th value is transparency.    
+    var color = [[254, 217, 118, 0.7], [254, 178, 76, 0.7], [253, 141, 60, 0.7], [252, 78, 42, 0.7], [227, 26, 28, 0.7], [189, 0, 38, 0.7], [150, 0, 38, 0.7] ];
+    var max  = 150000000; 
+    var diff = max/7; //devides the max value in 7 same size classes beneeth max value. So on the map, 8 classes are provided
+    
+    
+     //Population higher then "max value" gets the darkest color. 
+    if (feature.get('POP_EST') > max)  {
+ 
+        return new ol.style.Style({
+            fill: new ol.style.Fill({
+                color: [60, 0, 38, 0.7] // very dark red
+            }),
+            stroke: new ol.style.Stroke({
+            color: 'white',
+            lineDash: [4],
+            width: 3
+            })
+        });
+    }
+   
+    // for loop for assigning the colors to the country, depending on population number
+    for (i = 0; i < 7; i++) {
+        if (feature.get('POP_EST') > (i*diff) && feature.get('POP_EST') <= ((i+1)*diff) ) {
+    
+             return new ol.style.Style({
+                fill: new ol.style.Fill({
+                    color: color[i] 
+                }),
+                stroke: new ol.style.Stroke({
+                color: 'white',
+                lineDash: [4],
+                width: 3
+                })
+            });
+        }
+
+ 
+
+    }
+
+};
+
 
 
     //World capitals style
