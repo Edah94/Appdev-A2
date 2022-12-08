@@ -265,11 +265,11 @@ function init (){
             image: circleStyleCapitals
         })
     });
-    map.addLayer(WorldCapitalsGeoJSON)
+    //map.addLayer(WorldCapitalsGeoJSON)
 
 
     var vectorLayerGroup = new ol.layer.Group({
-        layers: [WorldCountriesGeoJSON, WorldCapitalsGeoJSON]
+        layers: [WorldCountriesGeoJSON]
     })
     map.addLayer(vectorLayerGroup);
 
@@ -325,11 +325,29 @@ function init (){
         },
       }));
     */
+      
+
+      var capitals = new ol.source.Vector({
+        features: new ol.format.GeoJSON().readFeatures(capitalsObject)
+    })
+
+    var capitalsLayer = new ol.layer.Vector({
+        title: 'Capitals',
+        source: capitalsObject,
+        style: new ol.style.Style({
+            fill: fillStyleCapitals,
+            stroke: strokeStyleCapitals,
+            image: circleStyleCapitals
+        })
+    });
+
+
+
     var select = new ol.interaction.Select({});
     map.addInteraction(select);
     
     var search = new ol.control.SearchFeature({
-        source: WorldCapitalsGeoJSON.getSource(),
+        source: capitalsObject, //WorldCapitalsGeoJSON.getSource()
         property: $(".options select").val()
     });
       

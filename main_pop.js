@@ -5,13 +5,14 @@ function init (){
         collapsible: false
         });
         
-
+    //map view
     const view = new ol.View({
         center: [0, 0],
         maxZoom: 18,
         zoom: 0
     })
 
+    //map
     var map = new ol.Map({
     controls: ol.control.defaults({attribution: false}).extend([attribution]),
     layers: [
@@ -49,8 +50,7 @@ function init (){
     
     
     
-
-    //overlayGroup - grouping of the (raster) Tile layers listed
+    //raster group for displaying different layers on radio button request
     var baseLayerGroup = new ol.layer.Group({
         layers: [Stamen, OSMStandard]
     })
@@ -68,51 +68,8 @@ function init (){
         })
     }
 
-
-   
-
-
-    //layerSwitcher control - enables switching and turning on/off between incorporated layers
-    //including raster and vector layers
-    var layerSwitcher = new ol.control.LayerSwitcher({
-        activationMode: 'click',
-        startActive: false,
-        groupSelectStyle: 'children'
-    });
     
-    //map.addControl(layerSwitcher);
-
-    /*
-    const container = document.getElementById('popup');
-    const content = document.getElementById('popup-content');
-    const closer = document.getElementById('popup-closer');
-
-    const overlay = new ol.Overlay({
-        element: container,
-        autoPan: {
-          animation: {
-            duration: 250,
-          },
-        },
-      });
-
-    closer.onclick = function () {
-        overlay.setPosition(undefined);
-        closer.blur();
-        return false;
-      };
-
-
-    map.on('singleclick', function (evt) {
-        const coordinate = evt.coordinate;
-        //const hdms = ol.coordinate.toStringHDMS(toLonLat(coordinate));
-      
-        content.innerHTML = '<p>You clicked here:</p><code>' + "yes" + '</code>';
-        overlay.setPosition(coordinate);
-      });
-    */
-    
-
+    //element to close the popup
     const closer = document.getElementById('close-feature');
     
     const popupContainerElement = document.querySelector(' .overlay-container')
@@ -122,13 +79,7 @@ function init (){
     });
     map.addOverlay(overlayLayer);
 
-    //doesn't work for now
-    function closePopup() {
-        let popupContainer = document.querySelector(' .overlay-container')
-        //popupContainer.style.display = "none";
-        popupContainer.innerHTML = null;
-      }
-    
+    //closes the popup if element clicked
     closer.onclick = function () {
     overlayLayer.setPosition(undefined);
     closer.blur();
@@ -140,10 +91,9 @@ function init (){
     const overlayFeatureName = document.getElementById('feature-name')
     const overlayFeaturePopEst = document.getElementById('feature-pop-est')
     const overlayFeatureSqkm = document.getElementById('feature-sq-km')
-    //const popupContainerDisplay = document.getElementById('close-feature')
+
     /* on click event listener - enables the interactivity between the 
     mapped layer and its features with the rest of the code*/
-    
     map.on('click', function(e){
         map.forEachFeatureAtPixel(e.pixel, function(feature, layer){
             //console.log(feature.get('title'))
@@ -185,33 +135,8 @@ function init (){
         })
     });
     
-    
-    // VECTOR FEATURE SECTION (geoJSON, styling..)
 
-
-    
-    //World countries style
-
-//     const fillStyleCountries = new ol.style.Fill({
-//     color: [84, 118, 255, 1] //4th digit - 1 nontransparent, 0 transparent
-//     });
-
-//     const strokeStyleCountries = new ol.style.Stroke({
-//         color: [46, 45, 45, 1],
-//         width: 1.2
-//     });
-    
-//     const circleStyleCountries = new ol.style.Circle({
-//         fill: new ol.style.Fill({
-//             color: [245, 49, 5, 1]
-//         }),
-//         radius: 7,
-//         stroke: strokeStyleCountries
-//     });
-
-// 
-
-        //World countries geoJSON as VectorImage
+    //World countries geoJSON as VectorImage
     const WorldCountriesGeoJSON = new ol.layer.Vector({
         source: new ol.source.Vector({
             url: './Data/geoJSON/countries_modified_WGS_1984.json',
@@ -225,6 +150,8 @@ function init (){
             return getWorldCountryStyle(feature, resolution);
         }
     });
+
+    
 
     //Population calculation function for style
     getWorldCountryStyle = function (feature, resolution) {
@@ -299,7 +226,7 @@ function init (){
             format: new ol.format.GeoJSON(),
             
         }),
-        visible: true,
+        visible: false,
         title: 'World Capital Cities',
         style: new ol.style.Style({
             fill: fillStyleCapitals,
@@ -307,9 +234,9 @@ function init (){
             image: circleStyleCapitals
         })
     });
-    map.addLayer(WorldCapitalsGeoJSON)
+    //map.addLayer(WorldCapitalsGeoJSON)
 
-
+    //layer group for displaying different layers on radio button request
     var vectorLayerGroup = new ol.layer.Group({
         layers: [WorldCountriesGeoJSON, WorldCapitalsGeoJSON]
     })
@@ -327,63 +254,6 @@ function init (){
         })
     }
 
-
-    const searchSource = new ol.source.Vector({
-        features: []
-      });
-
-    WorldCapitalsGeoJSON.on("addfeature", function (e) {
-        e.feature.set("featureType", "capital");
-        searchSource.addFeature(e.feature);
-      });
-      
-      WorldCountriesGeoJSON.on("addfeature", function (e) {
-        e.feature.set("featureType", "country");
-        searchSource.addFeature(e.feature);
-      });
-    
-    /*
-      var search = new ol.control.SearchFeature({
-        source: WorldCapitalsGeoJSON, // of type ol.source.Vector
-        getTitle: function (feature) {
-            
-            returnName = feature.get('name');
-
-            return returnName
-            
-    }});
-    map.addControl(search)
-    */
-      /*
-      map.addControl(new ol.control.SearchFeature({
-        source: searchSource,
-        getTitle: function (feature) {
-          switch (feature.get("featureType")) {
-            case "capital":
-              return feature.get("name");
-            case "country":
-              return feature.get("NAME");
-          }
-        },
-      }));
-    */
-    var select = new ol.interaction.Select({});
-    map.addInteraction(select);
-    
-    var search = new ol.control.SearchFeature({
-        source: WorldCapitalsGeoJSON.getSource(),
-        property: $(".options select").val()
-    });
-      
-    map.addControl(search)
-    
-    search.on('select'), function(e){
-        select.getFeatures().clear;
-        select.getFeatures().push (e.search);
-        var p = e.search.getGeometry().getFirstCoordinate();
-        map.getView().animate({center:p})
-    }
-    
 
 
 
@@ -403,57 +273,9 @@ function init (){
                 color: [200, 100, 120, 1]
             })
         })*/
-
+        
     })
 map.addInteraction(featureSelector)
-
-
-
-
-
-
-
-
-
-
-
-
-/*
-    //Feature interaction (Pointermove/hover)
-    const selectStyle = new ol.style.Style({
-        fill: new ol.style.Fill({
-        color: '#eeeeee',
-        }),
-        stroke: new ol.style.Stroke({
-        color: 'rgba(255, 255, 255, 0.7)',
-        width: 2,
-        }),
-    });
-
-
-    let selected = null;
-    map.on('pointermove', function (e) {
-    if (selected !== null) {
-        selected.setStyle(undefined);
-        selected = null;
-    }
-
-    map.forEachFeatureAtPixel(e.pixel, function (f) {
-        selected = f;
-        selectStyle.getFill().setColor(f.get('COLOR') || '#eeeeee');
-        f.setStyle(selectStyle);
-        return true;
-    });
-
-    if (selected) {
-        status.innerHTML = selected.get('ECO_NAME');
-    } else {
-        status.innerHTML = '&nbsp;';
-    }
-    });
-
-
-*/
 
 
 }// init() function
